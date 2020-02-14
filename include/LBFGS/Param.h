@@ -6,7 +6,8 @@
 
 #include <Eigen/Core>
 #include <stdexcept>  // std::invalid_argument
-
+#include <optional>
+#include <vector>
 
 namespace LBFGSpp {
 typedef std::optional<std::vector<std::pair<std::optional<double>, std::optional<double>>>> Bounds;
