@@ -9,6 +9,7 @@
 
 
 namespace LBFGSpp {
+typedef std::optional<std::vector<std::pair<std::optional<double>, std::optional<double>>>> Bounds;
 
 
 ///
@@ -154,6 +155,9 @@ public:
     ///
     Scalar wolfe;
 
+    Bounds bounds;
+    //// Optional boundaries
+
 public:
     ///
     /// Constructor for LBFGS parameters.
@@ -167,11 +171,12 @@ public:
         delta          = Scalar(0);
         max_iterations = 0;
         linesearch     = LBFGS_LINESEARCH_BACKTRACKING_ARMIJO;
-        max_linesearch = 20;
+        max_linesearch = 100;
         min_step       = Scalar(1e-20);
         max_step       = Scalar(1e+20);
         ftol           = Scalar(1e-4);
         wolfe          = Scalar(0.9);
+        bounds         = std::nullopt;
     }
 
     ///

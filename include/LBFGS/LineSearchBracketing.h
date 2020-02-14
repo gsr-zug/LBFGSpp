@@ -9,7 +9,6 @@
 
 namespace LBFGSpp {
 
-
 ///
 /// The bracketing line search algorithm for LBFGS. Mainly for internal use.
 ///
@@ -38,7 +37,7 @@ public:
     /// \param xp     The current point.
     /// \param param  Parameters for the LBFGS algorithm
     ///
-    template <typename Foo>
+  template <typename Foo>
     static void LineSearch(Foo& f, Scalar& fx, Vector& x, Vector& grad,
                            Scalar& step,
                            const Vector& drt, const Vector& xp,
@@ -66,6 +65,27 @@ public:
         {
             // x_{k+1} = x_k + step * d_k
             x.noalias() = xp + step * drt;
+
+            /// check Bounds
+          if(param.bounds){
+            auto bounds = param.bounds.value();
+
+            size_t i = 0;
+            for(const auto& bound : bounds){
+              std::optional<double> lowerBound, higherBound;
+              std::tie(lowerBound, higherBound) = bound;
+
+              /// check higher bound
+              if(higherBound && x[i] >= higherBound.value())
+                x[i] = higherBound.value();
+              /// check lower bound
+              if(lowerBound && x[i] <= lowerBound.value())
+                x[i] = lowerBound.value();
+
+              i++;
+            }
+          }
+
             // Evaluate this candidate
             fx = f(x, grad);
 

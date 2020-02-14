@@ -81,6 +81,9 @@ public:
     template <typename Foo>
     inline int minimize(Foo& f, Vector& x, Scalar& fx)
     {
+      if (m_param.bounds && x.size() != m_param.bounds.value().size())
+        throw std::runtime_error("Bounds and solution vector different size");
+
         const int n = x.size();
         const int fpast = m_param.past;
         reset(n);
